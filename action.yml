@@ -1,0 +1,37 @@
+name: 'Gitea SARIF to Comment'
+description: 'Post SARIF security scan results to Gitea Pull Request comments'
+author: 'Hayden Chang'
+branding:
+  icon: 'message-square'
+  color: 'purple'
+
+inputs:
+  sarif-file:
+    description: 'Path to the SARIF file'
+    required: true
+    default: 'scan_results.sarif'
+  token:
+    description: 'Gitea/GitHub Token'
+    required: true
+    default: ${{ github.token }}
+  title:
+    description: 'Title of the comment'
+    required: false
+    default: '🛡️ Security Scan Results'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Run SARIF Comment Script
+      shell: bash
+      # 使用 ${{ github.action_path }} 確保引用到 Action Repo 內的檔案
+      run: node "${{ github.action_path }}/sarif-to-comment.js"
+      env:
+        # 將 inputs 傳遞給環境變數
+        INPUT_SARIF_FILE: ${{ inputs.sarif-file }}
+        INPUT_TOKEN: ${{ inputs.token }}
+        INPUT_TITLE: ${{ inputs.title }}
+        # Gitea Runner 自動提供的變數
+        GITHUB_API_URL: ${{ github.api_url }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        GITHUB_EVENT_PATH: ${{ github.event_path }}
