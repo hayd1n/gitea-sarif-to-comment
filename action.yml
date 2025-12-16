@@ -24,14 +24,14 @@ runs:
   steps:
     - name: Run SARIF Comment Script
       shell: bash
-      # 使用 ${{ github.action_path }} 確保引用到 Action Repo 內的檔案
-      run: node "${{ github.action_path }}/sarif-to-comment.js"
+      # Use ${{ github.action_path }} to ensure referencing files within the Action Repo
+      run: node "${{ github.action_path }}/sarif-to-comment.mjs"
       env:
-        # 將 inputs 傳遞給環境變數
+        # Pass inputs to environment variables
         INPUT_SARIF_FILE: ${{ inputs.sarif-file }}
         INPUT_TOKEN: ${{ inputs.token }}
         INPUT_TITLE: ${{ inputs.title }}
-        # Gitea Runner 自動提供的變數
+        # Variables automatically provided by Gitea Runner
         GITHUB_API_URL: ${{ github.api_url }}
         GITHUB_REPOSITORY: ${{ github.repository }}
         GITHUB_EVENT_PATH: ${{ github.event_path }}
