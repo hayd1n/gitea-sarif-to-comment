@@ -3,14 +3,14 @@ import { existsSync, readFileSync } from "fs";
 async function run() {
   try {
     // Get environment variables and input parameters
-    const sarifFile = process.env.SARIF_FILE || "scan_results.sarif";
-    const githubToken = process.env.GITHUB_TOKEN;
+    const sarifFile = process.env.INPUT_SARIF_FILE || "scan_results.sarif";
+    const githubToken = process.env.INPUT_TOKEN;
+    const commentTitle = process.env.INPUT_TITLE || "🛡️ Security Scan Results";
+    const resultsLimit = parseInt(process.env.INPUT_RESULTS_LIMIT || "50", 10);
+
     const apiUrl = process.env.GITHUB_API_URL;
     const repository = process.env.GITHUB_REPOSITORY; // owner/repo
     const eventPath = process.env.GITHUB_EVENT_PATH;
-    const maxResults = parseInt(process.env.MAX_RESULTS || "50", 10);
-    const commentTitle =
-      process.env.COMMENT_TITLE || "🛡️ Security Scan Results";
 
     if (!existsSync(sarifFile)) {
       console.log(`SARIF file not found: ${sarifFile}`);
@@ -51,7 +51,7 @@ async function run() {
       body += "| Severity | Message | File | Line |\n";
       body += "| :--- | :--- | :--- | :--- |\n";
 
-      for (const res of results.slice(0, maxResults)) {
+      for (const res of results.slice(0, resultsLimit)) {
         // Limit display to first maxResults to avoid overly long comments
         const ruleId = res.ruleId;
         const message = res.message.text.replace(/\n/g, " "); // Remove newlines to avoid breaking table

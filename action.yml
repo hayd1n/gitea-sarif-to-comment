@@ -18,6 +18,10 @@ inputs:
     description: 'Title of the comment'
     required: false
     default: '🛡️ Security Scan Results'
+  results-limit:
+    description: 'Maximum number of results to post'
+    required: false
+    default: '50'
 
 runs:
   using: 'composite'
@@ -31,6 +35,7 @@ runs:
         INPUT_SARIF_FILE: ${{ inputs.sarif-file }}
         INPUT_TOKEN: ${{ inputs.token }}
         INPUT_TITLE: ${{ inputs.title }}
+        INPUT_RESULTS_LIMIT: ${{ inputs.results-limit }}
         # Variables automatically provided by Gitea Runner
         GITHUB_API_URL: ${{ github.api_url }}
         GITHUB_REPOSITORY: ${{ github.repository }}
