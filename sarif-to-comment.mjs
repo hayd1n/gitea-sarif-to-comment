@@ -88,6 +88,7 @@ async function run() {
     const endpoint = `${apiUrl}/repos/${repository}/issues/${prNumber}/comments`;
 
     console.log(`Posting comment to: ${endpoint}`);
+    console.log(`Token: ${githubToken ? "****" : "Not Provided"}`);
 
     const response = await fetch(endpoint, {
       method: "POST",
